@@ -245,4 +245,89 @@ function updateBounds() {
 imageContainer.addEventListener('mousemove', rotateToMouse);
 imageContainer.addEventListener('mouseleave', resetRotation);
 window.addEventListener('scroll', updateBounds);
-window.addEventListener('resize', updateBounds); 
+window.addEventListener('resize', updateBounds);
+
+// Typing Effect
+class TypeWriter {
+    constructor(element, words, wait = 3000) {
+        this.element = element;
+        this.words = words;
+        this.txt = '';
+        this.wordIndex = 0;
+        this.wait = parseInt(wait, 10);
+        this.type();
+        this.isDeleting = false;
+    }
+
+    type() {
+        // Current index of word
+        const current = this.wordIndex % this.words.length;
+        // Get full text of current word
+        const fullTxt = this.words[current];
+
+        // Check if deleting
+        if (this.isDeleting) {
+            // Remove char
+            this.txt = fullTxt.substring(0, this.txt.length - 1);
+        } else {
+            // Add char
+            this.txt = fullTxt.substring(0, this.txt.length + 1);
+        }
+
+        // Insert txt into element
+        this.element.innerHTML = `<span class="txt">${this.txt}</span>`;
+
+        // Initial Type Speed
+        let typeSpeed = 100;
+
+        if (this.isDeleting) {
+            typeSpeed /= 2;
+        }
+
+        // If word is complete
+        if (!this.isDeleting && this.txt === fullTxt) {
+            // Make pause at end
+            typeSpeed = this.wait;
+            // Set delete to true
+            this.isDeleting = true;
+        } else if (this.isDeleting && this.txt === '') {
+            this.isDeleting = false;
+            // Move to next word
+            this.wordIndex++;
+            // Pause before start typing
+            typeSpeed = 500;
+        }
+
+        setTimeout(() => this.type(), typeSpeed);
+    }
+}
+
+// Init On DOM Load
+document.addEventListener('DOMContentLoaded', init);
+
+// Init App
+function init() {
+    const titleElement = document.querySelector('.typing-title');
+    const descElement = document.querySelector('.typing-desc');
+    
+    const titles = [
+        'I build things for the web.',
+        'I create digital experiences.',
+        'I develop web applications.'
+    ];
+    
+    const descriptions = [
+        'I\'m a software engineering student specializing in web development.',
+        'Currently focused on building accessible, human-centered experiences.',
+        'Passionate about creating innovative solutions through code.'
+    ];
+
+    // Start typing effects with different delays
+    setTimeout(() => {
+        new TypeWriter(titleElement, titles, 3000);
+    }, 1000);
+
+    setTimeout(() => {
+        new TypeWriter(descElement, descriptions, 3000);
+    }, 2000);
+} 
