@@ -125,64 +125,6 @@ timelineItems.forEach(item => {
     timelineObserver.observe(item);
 });
 
-// Particle Effects
-particlesJS('particles-js', {
-    particles: {
-        number: {
-            value: 80,
-            density: {
-                enable: true,
-                value_area: 800
-            }
-        },
-        color: {
-            value: '#64ffda'
-        },
-        shape: {
-            type: 'circle'
-        },
-        opacity: {
-            value: 0.5,
-            random: false
-        },
-        size: {
-            value: 3,
-            random: true
-        },
-        line_linked: {
-            enable: true,
-            distance: 150,
-            color: '#64ffda',
-            opacity: 0.4,
-            width: 1
-        },
-        move: {
-            enable: true,
-            speed: 6,
-            direction: 'none',
-            random: false,
-            straight: false,
-            out_mode: 'out',
-            bounce: false
-        }
-    },
-    interactivity: {
-        detect_on: 'canvas',
-        events: {
-            onhover: {
-                enable: true,
-                mode: 'repulse'
-            },
-            onclick: {
-                enable: true,
-                mode: 'push'
-            },
-            resize: true
-        }
-    },
-    retina_detect: true
-});
-
 // Form Submission
 const contactForm = document.querySelector('.contact-form');
 
@@ -311,15 +253,15 @@ function init() {
     const descElement = document.querySelector('.typing-desc');
     
     const titles = [
-        'I build things for the web.',
-        'I create digital experiences.',
-        'I develop web applications.'
+        'Crafting innovative web solutions',
+        'Building scalable digital experiences',
+        'Developing modern web applications'
     ];
     
     const descriptions = [
-        'I\'m a software engineering student specializing in web development.',
-        'Currently focused on building accessible, human-centered experiences.',
-        'Passionate about creating innovative solutions through code.'
+        'I\'m a software system development student specializing in web development',
+        'Committed to developing high-performance web applications that meet both user needs and business goals',
+        'Passionate about creating innovative solutions through code'
     ];
 
     // Start typing effects with different delays
@@ -330,4 +272,50 @@ function init() {
     setTimeout(() => {
         new TypeWriter(descElement, descriptions, 3000);
     }, 2000);
-} 
+}
+
+// Floating Icons Animation
+const floatingIcons = document.querySelectorAll('.floating-icon');
+
+floatingIcons.forEach(icon => {
+    // Initial random position within constraints
+    const speed = parseFloat(icon.getAttribute('data-speed'));
+    let x = 0;
+    let y = 0;
+    let vx = (Math.random() - 0.5) * speed;
+    let vy = (Math.random() - 0.5) * speed;
+
+    function animate() {
+        // Update position
+        x += vx;
+        y += vy;
+
+        // Bounce off walls
+        if (x > 50 || x < -50) vx *= -1;
+        if (y > 50 || y < -50) vy *= -1;
+
+        // Apply transform with parallax effect
+        icon.style.transform = `translate(${x}px, ${y}px) scale(${1 + Math.abs(y/100)})`;
+
+        // Add subtle rotation
+        icon.style.transform += ` rotate(${x * 0.5}deg)`;
+
+        requestAnimationFrame(animate);
+    }
+
+    animate();
+});
+
+// Mouse parallax effect for floating icons
+document.addEventListener('mousemove', (e) => {
+    const mouseX = e.clientX / window.innerWidth;
+    const mouseY = e.clientY / window.innerHeight;
+
+    floatingIcons.forEach(icon => {
+        const speed = parseFloat(icon.getAttribute('data-speed'));
+        const offsetX = (mouseX - 0.5) * 20 * speed;
+        const offsetY = (mouseY - 0.5) * 20 * speed;
+
+        icon.style.transform += ` translate(${offsetX}px, ${offsetY}px)`;
+    });
+}); 
